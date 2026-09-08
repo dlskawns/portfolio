@@ -234,3 +234,22 @@ footer{border-top:1px solid var(--line);padding:52px 0 68px}
 .art-foot{padding:34px 0 72px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
 .art-foot a{font-family:var(--mono);font-size:12.5px;color:var(--muted);transition:color .2s}
 .art-foot a:hover{color:var(--signal)}
+
+/* inline concept diagrams (theme-aware, token-colored) */
+.dg-fig{margin:20px 0 8px;border:1px solid var(--line);border-radius:13px;background:var(--surface);padding:20px 18px 6px}
+.dg-fig .cap{font-family:var(--mono);font-size:11.5px;color:var(--faint);line-height:1.55;padding:12px 2px 6px}
+.dg{width:100%;height:auto;display:block}
+.dg text{font-family:var(--sans);fill:var(--muted)}
+.dg .mono{font-family:var(--mono)}
+.dg .ink{fill:var(--ink)}
+.dg .sig{fill:var(--signal)}
+.dg .mut{fill:var(--muted)}
+.dg .fnt{fill:var(--faint)}
+.dg .box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
+.dg .box-ac{fill:var(--signal-soft);stroke:var(--signal);stroke-width:1.5}
+.dg .box-2{fill:var(--surface-2);stroke:var(--line);stroke-width:1.5}
+.dg .flow{stroke:var(--faint);stroke-width:1.6;fill:none}
+.dg .flow-ac{stroke:var(--signal);stroke-width:1.9;fill:none}
+.dg .flow-d{stroke:var(--faint);stroke-width:1.6;fill:none;stroke-dasharray:4 4}
+.dg .arh{fill:var(--faint)}
+.dg .arh-ac{fill:var(--signal)}

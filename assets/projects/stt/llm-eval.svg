@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="376" viewBox="0 0 880 376" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif">
 <text x="0" y="24" font-size="17" fill="#7d8590" text-anchor="start" font-weight="600">LLM 번역 평가 — FLORES-200 일→한, 997문장</text>
-<text x="0" y="46" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">동일 프롬프트 · 전 모델 Q4_K_M · 추론 끔 · paired bootstrap n=2000, 모든 쌍 p&lt;0.001</text>
+<text x="0" y="46" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">동일 프롬프트 | 전 모델 Q4_K_M | 추론 끔 | paired bootstrap n=2000, 모든 쌍 p&lt;0.001</text>
 <text x="0" y="78" font-size="11" fill="#7d8590" text-anchor="start" font-weight="600">모델</text>
 <text x="150" y="78" font-size="11" fill="#7d8590" text-anchor="start" font-weight="600">chrF++ (높을수록 좋음)</text>
 <text x="530" y="78" font-size="11" fill="#7d8590" text-anchor="middle" font-weight="600">일본어 잔류</text>

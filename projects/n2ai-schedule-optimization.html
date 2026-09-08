@@ -46,6 +46,28 @@
     <h3>문제</h3>
     <p>수기로 며칠이 걸리던 인력 배치 편성을 자동화하는 문제입니다. 다수의 제약 조건을 사람이 조율하기 어렵고, 그 조건들을 <strong>단일 점수로 합산해 관리하면 위반 사이의 중요도 차이가 사라집니다.</strong></p>
     <p>예를 들어 필수 인원 부족과 희망 근무 미반영이 같은 위반 1건으로 집계됩니다. 운영 관점의 중요도를 구분할 수 없고, 해를 못 찾을 때 어떤 조건이 원인인지 진단할 수도 없습니다.</p>
+    <div class="dg-fig">
+    <svg class="dg" viewBox="0 0 640 190" role="img" aria-label="중요도가 다른 위반이 단일 점수로 합산되어 중요도 차이가 사라지는 구조">
+    <defs><marker id="soA" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path class="arh" d="M0,0 L8,4 L0,8 Z"/></marker></defs>
+    <text class="mono mut" x="10" y="18" font-size="12">서로 다른 중요도의 위반을 단일 점수로 합산하면</text>
+    <rect class="box-ac" x="12" y="34" width="196" height="52" rx="10"/>
+    <text class="ink" x="28" y="60" font-size="14" font-weight="600">필수 인원 부족</text>
+    <text class="sig mono" x="28" y="78" font-size="11">치명 (운영 불가)</text>
+    <rect class="box" x="12" y="108" width="196" height="52" rx="10"/>
+    <text class="ink" x="28" y="134" font-size="14" font-weight="600">개인 희망 미반영</text>
+    <text class="mut mono" x="28" y="152" font-size="11">경미 (조정 가능)</text>
+    <path class="flow" d="M208,60 C246,60 250,100 288,104" marker-end="url(#soA)"/>
+    <path class="flow" d="M208,134 C246,134 250,112 288,110" marker-end="url(#soA)"/>
+    <circle class="box-2" cx="316" cy="107" r="23"/>
+    <text class="ink" x="316" y="115" font-size="22" font-weight="700" text-anchor="middle">+</text>
+    <path class="flow" d="M339,107 L402,107" marker-end="url(#soA)"/>
+    <rect class="box-2" x="406" y="72" width="220" height="70" rx="11"/>
+    <text class="ink" x="516" y="101" font-size="14.5" font-weight="700" text-anchor="middle">위반 총 2건, 동일 가중</text>
+    <text class="mut" x="516" y="123" font-size="12" text-anchor="middle">치명과 경미가 같은 무게</text>
+    <text class="sig" x="516" y="176" font-size="13" font-weight="600" text-anchor="middle">중요도 차이가 사라짐</text>
+    </svg>
+    <div class="cap">필수 인원 부족(치명)과 희망 미반영(경미)이 같은 위반 1건으로 합산되어 우선순위가 사라진다.</div>
+    </div>
   </div>
 
   <div class="block">
@@ -55,6 +77,52 @@
       <li><b>대안 검증과 기각.</b> 재탐색 위치 선택을 학습으로 개선하려던 가설을 강화학습(PPO) 실험으로 검증했으나, 병목이 학습 파라미터가 아니라 목적 우선순위임을 실측으로 확인하고 단계별 제약 최적화로 해결.</li>
       <li><b>설명가능 진단 그래프.</b> 제약, 대상, 상태, 조치를 노드로 하는 경량 관계 그래프로 충돌 원인을 구조화. max-flow로 부족 하한을 산술 산출하고, 복구 대안을 최소 변경 순으로 리랭킹한 뒤, 솔버 재실행으로 검증.</li>
     </ul>
+    <div class="dg-fig">
+    <svg class="dg" viewBox="0 0 660 268" role="img" aria-label="단일 점수 합산과 계층적 최적화의 비교">
+    <defs>
+    <marker id="soB" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path class="arh" d="M0,0 L8,4 L0,8 Z"/></marker>
+    <marker id="soBa" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path class="arh-ac" d="M0,0 L8,4 L0,8 Z"/></marker>
+    </defs>
+    <text class="mono mut" x="10" y="20" font-size="12.5" font-weight="600">단일 점수 합산</text>
+    <rect class="box" x="8" y="40" width="76" height="40" rx="8"/><text class="mut" x="46" y="64" font-size="11.5" text-anchor="middle">필수 부족</text>
+    <text class="ink" x="94" y="66" font-size="17" font-weight="700" text-anchor="middle">+</text>
+    <rect class="box" x="104" y="40" width="76" height="40" rx="8"/><text class="mut" x="142" y="64" font-size="11.5" text-anchor="middle">규칙 위반</text>
+    <text class="ink" x="190" y="66" font-size="17" font-weight="700" text-anchor="middle">+</text>
+    <rect class="box" x="200" y="40" width="86" height="40" rx="8"/><text class="mut" x="243" y="64" font-size="11.5" text-anchor="middle">희망 미반영</text>
+    <path class="flow" d="M147,80 L147,110" marker-end="url(#soB)"/>
+    <rect class="box-2" x="62" y="116" width="170" height="46" rx="9"/><text class="ink" x="147" y="144" font-size="13" font-weight="600" text-anchor="middle">가중 합, 총점 1개</text>
+    <text class="mut" x="147" y="192" font-size="12" text-anchor="middle">우선순위 정보 없음</text>
+    <text class="mut" x="147" y="212" font-size="12" text-anchor="middle">경미가 치명을 상쇄</text>
+    <line class="flow-d" x1="322" y1="28" x2="322" y2="248"/>
+    <text class="sig mono" x="352" y="20" font-size="12.5" font-weight="600">계층적 (Lexicographic)</text>
+    <rect class="box-ac" x="356" y="38" width="286" height="44" rx="9"/><text class="ink" x="374" y="65" font-size="13" font-weight="600">① 필수 인원</text><text class="sig mono" x="628" y="65" font-size="11" text-anchor="end">먼저 0으로</text>
+    <path class="flow-ac" d="M499,82 L499,104" marker-end="url(#soBa)"/>
+    <rect class="box" x="356" y="110" width="286" height="44" rx="9"/><text class="ink" x="374" y="137" font-size="13" font-weight="600">② 근무 규칙</text><text class="mut mono" x="628" y="137" font-size="11" text-anchor="end">그다음</text>
+    <path class="flow-ac" d="M499,154 L499,176" marker-end="url(#soBa)"/>
+    <rect class="box" x="356" y="182" width="286" height="44" rx="9"/><text class="ink" x="374" y="209" font-size="13" font-weight="600">③ 희망 반영</text><text class="mut mono" x="628" y="209" font-size="11" text-anchor="end">마지막</text>
+    <text class="mut" x="356" y="250" font-size="11.5">상위 등급을 0으로 만든 뒤 다음 등급을 최소화</text>
+    </svg>
+    <div class="cap">왼쪽은 여러 위반을 한 줄로 더해 총점 하나로 만들어 우선순위가 사라진다. 오른쪽은 우선순위 등급을 세로로 쌓아 상위 등급을 먼저 0으로 만든 뒤 다음 등급으로 내려간다.</div>
+    </div>
+    <div class="dg-fig">
+    <svg class="dg" viewBox="0 0 640 188" role="img" aria-label="제약 대상 상태 조치를 잇는 관계 그래프 기반 실패 진단">
+    <defs>
+    <marker id="soC" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path class="arh" d="M0,0 L8,4 L0,8 Z"/></marker>
+    <marker id="soCa" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path class="arh-ac" d="M0,0 L8,4 L0,8 Z"/></marker>
+    </defs>
+    <text class="mono mut" x="10" y="18" font-size="12">제약, 대상, 상태, 조치를 노드로 잇는 관계 그래프</text>
+    <rect class="box" x="18" y="36" width="126" height="46" rx="9"/><text class="ink" x="81" y="64" font-size="13" font-weight="600" text-anchor="middle">제약 조건</text>
+    <rect class="box" x="18" y="116" width="126" height="46" rx="9"/><text class="ink" x="81" y="144" font-size="13" font-weight="600" text-anchor="middle">편성 대상</text>
+    <rect class="box-ac" x="208" y="76" width="150" height="52" rx="10"/><text class="ink" x="283" y="99" font-size="13" font-weight="600" text-anchor="middle">상태: 인원 부족</text><text class="sig mono" x="283" y="117" font-size="10.5" text-anchor="middle">max-flow 하한</text>
+    <rect class="box" x="422" y="36" width="152" height="46" rx="9"/><text class="ink" x="498" y="64" font-size="13" font-weight="600" text-anchor="middle">조치: 조건 완화</text>
+    <rect class="box-ac" x="422" y="116" width="152" height="46" rx="9"/><text class="ink" x="498" y="143" font-size="12.5" font-weight="600" text-anchor="middle">최소 변경 복구</text>
+    <path class="flow" d="M144,59 C176,59 178,96 204,101" marker-end="url(#soC)"/>
+    <path class="flow" d="M144,139 C176,139 178,110 204,107" marker-end="url(#soC)"/>
+    <path class="flow-ac" d="M358,96 C390,96 392,62 418,60" marker-end="url(#soCa)"/>
+    <path class="flow-ac" d="M358,110 C390,110 392,136 418,138" marker-end="url(#soCa)"/>
+    </svg>
+    <div class="cap">충돌 원인을 관계 그래프로 구조화하고, max-flow로 부족 하한을 산출한 뒤 복구안을 최소 변경 순으로 리랭킹해 솔버로 재검증한다.</div>
+    </div>
   </div>
 
   <div class="block">
