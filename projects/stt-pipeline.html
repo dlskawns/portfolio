@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sttpipe — David Lee's Lab</title>
+<meta name="description" content="음성을 전사, 번역, 요약으로 잇는 로컬 우선 STT 파이프라인 sttpipe">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">STT / PIPELINE / 2026</div>
+    <h1 class="art-title">음성을 번역된 요약으로 잇는 파이프라인, <span class="en">sttpipe</span></h1>
+    <div class="art-meta">
+      <span>역할 <b>개인 프로젝트 (전 과정)</b></span>
+      <span>기간 <b>2026</b></span>
+      <span>배포 <b>GitHub 설치</b></span>
+    </div>
+    <div class="art-stack">
+      <span>faster-whisper</span><span>Ollama</span><span>OpenAI 호환 API</span><span>pyannote (선택)</span><span>ffmpeg</span><span>Python</span><span>Gradio</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>Whisper는 전사까지만 해줍니다. 거기서 <strong>무슨 말을 했는지, 내 언어로, 요약해서</strong>까지 가려면 전사, 번역, 요약을 직접 이어붙이고 타임아웃, 폴백, 프롬프트 작업을 해야 합니다.</p>
+    <p>sttpipe는 그 접착 부분을 패키지로 만든 도구입니다. 녹음 파일 하나를 넣으면 번역된 요약이 나옵니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>3단계 파이프라인.</b> 전사(faster-whisper, 기본 small, CPU int8) → 번역 → 요약.</li>
+      <li><b>로컬 우선 LLM.</b> Ollama(qwen3, gemma 계열)나 OpenAI 호환 API를 선택. <code>--provider auto/ollama/openai/none</code>.</li>
+      <li><b>여러 사용 형태.</b> CLI(<code>sttpipe run meeting.wav --target ko</code>), 라이브러리 import, Gradio 브라우저 데모, 세팅 점검 <code>check --probe</code>.</li>
+      <li><b>선택적 화자분리.</b> pyannote 계열 diarize extra를 옵션으로 분리.</li>
+    </ul>
+  </div>
+
+  <div class="fig"><img loading="lazy" src="../assets/projects/stt/timing.svg" alt="처리 시간 분해"><div class="cap">처리 시간의 92%가 LLM 두 단계, 전사는 4% 수준. 배포 설계를 좌우하는 단일 사실.</div></div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">92%</div><div class="lab">처리 시간이 LLM 두 단계에 집중, 전사는 4%</div></div>
+      <div class="co"><div class="big">29.61</div><div class="lab">FLORES-200 ja→ko chrF++ 1위 gemma4</div></div>
+      <div class="co"><div class="big">997</div><div class="lab">문장 paired bootstrap 2000회 번역 평가</div></div>
+    </div>
+    <ul>
+      <li><b>병목은 LLM.</b> 처리 시간의 92%가 번역과 요약, 전사는 4%. 배포 설계를 좌우하는 사실을 측정으로 못박음.</li>
+      <li><b>STT 오류는 상류에서 결정.</b> 금액, 날짜, 전화번호는 살아남고 고유명사와 전문용어에서 깨짐. 상류 오류라 하류 LLM을 키워도 복원 불가, 해법은 <code>--whisper-model medium</code>.</li>
+      <li><b>번역 모델 비교.</b> FLORES-200 일본어에서 한국어 997문장, 5개 모델, paired bootstrap 2000회. 1위 gemma4(chrF++ 29.61), 현재 기본값 qwen3:8b는 5개 중 4위.</li>
+    </ul>
+  </div>
+
+  <div class="fig"><img loading="lazy" src="../assets/projects/stt/llm-eval.svg" alt="번역 모델 비교"><div class="cap">번역 LLM 5종 chrF++ 비교. 표본 100문장에서는 유의성이 없었고 997문장에서 전 쌍이 유의.</div></div>
+
+  <div class="honesty">
+    <h4>정직성 노트</h4>
+    <p>표본 100문장에서는 모델 간 유의차가 없었고, 997문장으로 늘렸을 때 비로소 전 쌍이 유의했습니다. 측정 과정에서 발견한 버그(통화 단위 바꿔치기 428,000엔 → 428,000원, 프롬프트 지시문 누출, 채점기 오답 처리)를 그대로 문서화했습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="https://github.com/dlskawns" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

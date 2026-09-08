@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아이들나라 키즈 OTT 추천 — David Lee's Lab</title>
+<meta name="description" content="시청 이력과 메타데이터를 결합한 NeuMF 개인화 추천, LG U+ 아이들나라 35위 658팀">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">LG UPLUS 아이들나라 / 35위 / 658팀 / 2022</div>
+    <h1 class="art-title">아이들나라 키즈 OTT 콘텐츠 개인화 추천</h1>
+    <div class="art-meta">
+      <span>역할 <b>데이터 분석, 전처리, 모델 실험</b></span>
+      <span>팀 <b>2인</b></span>
+      <span>기간 <b>2022.09 ~ 2022.10</b></span>
+    </div>
+    <div class="art-stack">
+      <span>Python</span><span>PyTorch</span><span>NeuMF</span><span>FM Layer</span><span>Pandas</span><span>NumPy</span><span>SciPy</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>키즈 콘텐츠는 연령대, 보호자 선택, 장르, 길이가 추천 품질에 크게 영향을 줍니다. EDA로 feature 가설을 세운 뒤 모델 실험으로 검증했습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>EDA로 가설 수립.</b> 연령대별 장르 선호 차이를 카이제곱 검정(p=0.0)으로 확인하고, 런타임과 소비 횟수 상관을 분석.</li>
+      <li><b>NeuMF에 메타 결합.</b> baseline에 runtime, sex, view, search, payment feature를 추가.</li>
+      <li><b>FM Layer 비교.</b> DeepFM을 차용한 2차 상호작용 가설을 실험2로 비교.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">상위 5.3%</div><div class="lab">최종 35위 / 658팀</div></div>
+      <div class="co"><div class="big">0.2251</div><div class="lab">Recall@25 (NDCG@25 0.2065)</div></div>
+      <div class="co"><div class="big">0.2204</div><div class="lab">baseline 0.2136 → Opt2 0.2204</div></div>
+    </div>
+    <p>메타 feature 결합으로 baseline(NeuMF) 0.2136을 0.2204로 올렸습니다. FM Layer 추가는 오히려 불안정했고, layer를 더하는 것보다 feature 품질과 score 결합 방식이 중요하다는 결론을 얻었습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="https://dlskawns.github.io" target="_blank" rel="noopener">연구 블로그 ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FJSP 스케줄 리페어 — David Lee's Lab</title>
+<meta name="description" content="설비 장애 재스케줄링에서 충돌 정보의 가치를 사전등록 실험으로 검증하는 진행중 연구">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">OR RESEARCH / 2026 <span class="wip">진행중</span></div>
+    <h1 class="art-title">FJSP 스케줄 리페어, 충돌 정보는 언제 이득인가</h1>
+    <div class="art-meta">
+      <span>역할 <b>개인 연구 (전 과정)</b></span>
+      <span>기간 <b>2026 ~ 진행중</b></span>
+      <span>상태 <b>사전등록 탐색 실험</b></span>
+    </div>
+    <div class="art-stack">
+      <span>Python</span><span>CP-SAT (OR-Tools)</span><span>LNS</span><span>FJSP 시뮬레이터</span><span>FastAPI</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>제조 현장에 disruption(설비 장애, 품질 이상)이 생겼을 때, 기존 스케줄을 <strong>얼마나 다시 열어 재계획할 것인가</strong>가 문제입니다.</p>
+    <p>범위가 너무 좁으면 문제를 못 고치고, 너무 넓으면 계산 비용과 스케줄 흔들림(nervousness)이 커집니다. 그 사이에서 재계획 범위를 어떻게 정할지 다룹니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>4개 정책 비교.</b> P0 직접영향 operation만 재배치, P1 adaptive k-hop 이웃 확장, P2 conflict-guided(infeasibility core로 대상 선택), P3 전체 재최적화.</li>
+      <li><b>충돌의 정의.</b> 여기서 충돌은 불가능성을 유발하는 제약 집합(infeasibility core)을 가리킵니다. P2는 이 충돌 정보로 재스케줄 범위를 고릅니다.</li>
+      <li><b>사전등록 규율.</b> 모든 결과는 사전등록 후 실행. post-treatment 조건화 금지, admission gate 금지, 실패한 confirmatory를 sensitivity로 rescue 금지. 교차검토는 gpt-5.6이 담당.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>예비 결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">4</div><div class="lab">재계획 범위 정책 P0 ~ P3 비교</div></div>
+      <div class="co"><div class="big">M4</div><div class="lab">conflict-guided 우위 가설 NOT SUPPORTED</div></div>
+      <div class="co"><div class="big">M5</div><div class="lab">사전 감지 certificate 가설 NOT SUPPORTED</div></div>
+    </div>
+    <ul>
+      <li><b>M4.</b> conflict-guided가 adaptive k-hop보다 낫다는 가설이 조건 A, B 모두에서 기각. 남긴 결론은 충돌 정보에 보편적 가치는 없고, 그 가치는 정보를 얻고 활용하는 계산 비용과 견줘야 한다는 것.</li>
+      <li><b>M5.</b> 정책 실행 전에 P2가 필요한 시점을 구조적으로 감지 가능한가를 물었고, one-sided capacity certificate가 한 번도 발화하지 않아 기각. <code>Z=0</code>은 직접 범위로 충분하다는 뜻이 아니라 certificate가 부족을 증명하지 못했다는 뜻이라는 구분을 문서 전반에서 유지.</li>
+    </ul>
+  </div>
+
+  <div class="honesty">
+    <h4>정직성 노트</h4>
+    <p>두 confirmatory 가설이 모두 NOT SUPPORTED로 나왔고, 결과를 본 뒤 규칙을 바꾸지 않았습니다. 외부 벤치마크 재현(Fattahi, Behnke)은 재현 실패 또는 policy run 대기 상태이며, 재현되지 않은 것을 독립 검증이라 부르지 않습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="https://dlskawns.github.io/optimization/prereg-not-supported/" target="_blank" rel="noopener">관련 연구 기록 ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

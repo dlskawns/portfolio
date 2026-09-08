@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tencent UNI-REC — David Lee's Lab</title>
+<meta name="description" content="익명화된 4개 도메인을 단일 backbone으로 통합해 전환확률을 예측하는 추천 연구">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">RECSYS RESEARCH / 2026 / TAAC 2026</div>
+    <h1 class="art-title"><span class="en">Tencent UNI-REC</span> Challenge, 멀티도메인 통합 추천 백본</h1>
+    <div class="art-meta">
+      <span>역할 <b>개인 (분석, 모델링, 인프라 전부)</b></span>
+      <span>기간 <b>2026.04 ~ 2026.06</b></span>
+    </div>
+    <div class="art-stack">
+      <span>PyTorch</span><span>TWIN</span><span>HSTU</span><span>DCN-V2</span><span>MMoE / PLE</span><span>DANN</span><span>Claude Code 서브에이전트</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>Tencent가 익명화한 4개 도메인 데이터에서 단일 backbone으로 전환확률(CVR)을 예측하는 과제입니다. feature가 숫자 id로만 익명화되어 <strong>무엇을 모델링할지 데이터로 역설계</strong>해야 했습니다.</p>
+    <ul>
+      <li>시퀀스가 길고(p90 887 ~ 2215) 전환이 불균형(12.4%).</li>
+      <li>4개 도메인 vocab이 거의 분리(Jaccard 0.7 ~ 10%).</li>
+      <li>target item이 history에 0.4%만 등장하는 extrapolation regime.</li>
+    </ul>
+  </div>
+
+  <div class="fig"><img loading="lazy" src="../assets/projects/tencent/seqlen.png" alt="도메인별 시퀀스 길이"><div class="cap">도메인별 시퀀스 길이 분포. 길고 불균형한 시퀀스가 모델 선택을 좌우했다.</div></div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>실패 모드를 EDA로 먼저 규명.</b> 단변량 GBDT로 item_int_13 하나가 전환율을 12.4%에서 64%로 가른다는 signal 발견.</li>
+      <li><b>추천 SOTA를 논문에서 직접 구현.</b> TWIN 2-stage long-seq retrieval, HSTU, DCN-V2, 양방향 cross-attention, MMoE/PLE, DANN debiasing. model.py 약 2,400줄.</li>
+      <li><b>재현가능 하네스.</b> 가설 → experiment-card → 클라우드 학습 → verdict → registry 루프를 Claude Code 서브에이전트로 오케스트레이션.</li>
+      <li><b>인과 격리.</b> 한 실험당 구조 변경 1개(단일변형), split은 항상 label_time 기준(누수 차단), user_id 10% OOF 고정.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">0.842</div><div class="lab">Platform AUC (vanilla 0.835426 → 0.842249)</div></div>
+      <div class="co"><div class="big">130+</div><div class="lab">단일변형 실험, 전량 재현 정보 추적</div></div>
+      <div class="co"><div class="big">~2,400</div><div class="lab">model.py 라인, SOTA 직접 구현</div></div>
+    </div>
+    <p>130회 이상의 실험을 전량 {seed, git_sha, config_sha256, compute_tier}로 추적했습니다. 오프라인과 온라인 지표 괴리(Val/OOF +0.0005인데 Platform -0.0042)를 진단해 오프라인 지표 맹신 금지를 데이터로 입증했습니다.</p>
+  </div>
+
+  <div class="honesty">
+    <h4>정직성 노트</h4>
+    <p>순위 또는 수상은 아닙니다. 상위권이 아니었고, 큰 레버를 못 찾고 미세튜닝(대부분 +0.0007 수준)에 갇혔다는 회고를 남겼습니다. 이 프로젝트는 순위가 아니라 방법론, 실험 규율, 재현성으로 봐 주시길 바랍니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="https://dlskawns.github.io" target="_blank" rel="noopener">연구 블로그 ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

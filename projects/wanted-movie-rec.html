@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>설명 가능한 영화 추천 — David Lee's Lab</title>
+<meta name="description" content="SASRec 후보 추출에 LangGraph 멀티에이전트를 얹어 이유까지 설명하는 개인화 영화 추천, 네이버 x 원티드 프롬프톤 결선">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">네이버 x 원티드 프롬프톤 / 결선 / 2024</div>
+    <h1 class="art-title">설명 가능한 개인화 영화 추천 파이프라인</h1>
+    <div class="art-meta">
+      <span>역할 <b>프롬프트 엔지니어링, 구조화</b></span>
+      <span>팀 <b>가짜연구소 3인</b></span>
+      <span>기간 <b>2024.07</b></span>
+    </div>
+    <div class="art-stack">
+      <span>HyperCLOVA HCX-003</span><span>LangGraph</span><span>ChromaDB</span><span>Elastic Search</span><span>TMDB API</span><span>Django</span><span>Openshift</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>영화 추천 결과의 <strong>설명 가능성 부족</strong>이 사용자 경험을 저해합니다. 대규모 플랫폼도 왜 이 콘텐츠가 추천됐는지 명확한 설명을 주지 못합니다. 설명 가능하고 개인화된 추천을 목표로 기획했습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <p>PALR(Personalization Aware LLMs for Recommendation) 아이디어를 차용해, HyperCLOVA 구조적 프롬프트와 LangGraph 멀티에이전트 3-flow로 설계했습니다.</p>
+    <ul>
+      <li><b>FLOW 1 유저 특징.</b> is_recommend 에이전트가 라우팅 분기, user_profile 에이전트가 시청 히스토리에서 선호 feature 생성.</li>
+      <li><b>FLOW 2 메타 추출과 후보 검색.</b> self-query로 메타 검출(예: 봉준호 감독), TMDB API와 Elastic, ChromaDB로 후보 추출.</li>
+      <li><b>FLOW 3 추천 실행.</b> recommend_movie 에이전트가 CoT로 추천과 설명 작성, relevance_check 에이전트가 적합성 검토, 부적합하면 재추천 루프.</li>
+      <li><b>프롬프트 구조화.</b> GOAL, PROCEDURE, FORMAT(JSON), FewShot 구조로 영어 작성해 순차 처리를 안정화.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">15팀</div><div class="lab">183팀 중 결선 진출</div></div>
+      <div class="co"><div class="big">3-flow</div><div class="lab">LangGraph 멀티에이전트 구조</div></div>
+      <div class="co"><div class="big">CoT</div><div class="lab">추천 이유까지 생성, 적합성 재검토</div></div>
+    </div>
+    <p>총 183팀 중 상위 15팀 결선에 진출했습니다. 프롬프트 구조화로 오류 발생률을 최소화하는 과정에서 생성 AI 역량을 크게 넓혔습니다.</p>
+  </div>
+
+  <div class="honesty">
+    <h4>회고</h4>
+    <p>영화 추천이라는 비교적 단순한 주제 선정에는 아쉬움이 남았습니다. 다만 멀티에이전트의 발전 가능성을 확인했고, 생성 기반이라도 메타정보 데이터 전처리가 중요하다는 점을 배웠습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="../index.html#credentials">수상 내역 ↗</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div>
+  </div>
+</footer>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

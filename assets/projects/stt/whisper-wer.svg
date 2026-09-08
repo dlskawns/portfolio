@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="438" viewBox="0 0 760 438" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif">
+<text x="0" y="24" font-size="16" fill="#7d8590" text-anchor="start" font-weight="600">Whisper 모델 크기별 오류율 — 일본어 / 한국어</text>
+<text x="0" y="46" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">OpenAI Whisper 논문 Table 13 (FLEURS). 낮을수록 좋음. 띄어쓰기가 없는 언어라 CER 기준</text>
+<text x="0" y="102" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">tiny</text>
+<rect x="160" y="78" width="238.70967741935485" height="16" fill="#e0913a" rx="2"/>
+<text x="406.7096774193549" y="91" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">37.0%</text>
+<rect x="160" y="97" width="400.0" height="16" fill="#4c8fd4" rx="2"/>
+<text x="568.0" y="110" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">62.0%</text>
+<text x="0" y="146" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">base</text>
+<rect x="160" y="122" width="147.09677419354838" height="16" fill="#e0913a" rx="2"/>
+<text x="315.0967741935484" y="135" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">22.8%</text>
+<rect x="160" y="141" width="179.35483870967744" height="16" fill="#4c8fd4" rx="2"/>
+<text x="347.35483870967744" y="154" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">27.8%</text>
+<text x="0" y="190" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">small  ← 기본값</text>
+<rect x="160" y="166" width="77.41935483870968" height="16" fill="#e0913a" rx="2"/>
+<text x="245.4193548387097" y="179" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">12.0%</text>
+<rect x="160" y="185" width="126.45161290322582" height="16" fill="#4c8fd4" rx="2"/>
+<text x="294.45161290322585" y="198" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">19.6%</text>
+<text x="0" y="234" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">medium</text>
+<rect x="160" y="210" width="45.806451612903224" height="16" fill="#e0913a" rx="2"/>
+<text x="213.80645161290323" y="223" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">7.1%</text>
+<rect x="160" y="229" width="105.8064516129032" height="16" fill="#4c8fd4" rx="2"/>
+<text x="273.8064516129032" y="242" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">16.4%</text>
+<text x="0" y="278" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">large</text>
+<rect x="160" y="254" width="41.29032258064516" height="16" fill="#e0913a" rx="2"/>
+<text x="209.29032258064515" y="267" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">6.4%</text>
+<rect x="160" y="273" width="98.06451612903226" height="16" fill="#4c8fd4" rx="2"/>
+<text x="266.06451612903226" y="286" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">15.2%</text>
+<text x="0" y="322" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">large-v2</text>
+<rect x="160" y="298" width="34.193548387096776" height="16" fill="#e0913a" rx="2"/>
+<text x="202.19354838709677" y="311" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">5.3%</text>
+<rect x="160" y="317" width="92.25806451612904" height="16" fill="#4c8fd4" rx="2"/>
+<text x="260.258064516129" y="330" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">14.3%</text>
+<rect x="160" y="336" width="11" height="11" fill="#e0913a" rx="2"/>
+<text x="177" y="346" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">일본어</text>
+<rect x="250" y="336" width="11" height="11" fill="#4c8fd4" rx="2"/>
+<text x="267" y="346" font-size="12" fill="#7d8590" text-anchor="start" font-weight="normal">한국어</text>
+<text x="0" y="376" font-size="13" fill="#4fa87a" text-anchor="start" font-weight="600">▶ 일본어: small 12.0% → medium 7.1%. 오류가 41% 줄어듭니다.</text>
+<text x="0" y="398" font-size="13" fill="#7d8590" text-anchor="start" font-weight="normal">▶ medium 이후는 개선폭이 급감합니다 (7.1 → 6.4 → 5.3).</text>
+<text x="0" y="420" font-size="12" fill="#8b949e" text-anchor="start" font-weight="normal">▶ 이 수치는 제3자 벤치마크입니다. 이 저장소의 측정값이 아닙니다.</text>
+</svg>
