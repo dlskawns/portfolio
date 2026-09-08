@@ -95,7 +95,14 @@
   <section id="projects" class="reveal">
     <div class="eyebrow"><b>03</b> SELECTED PROJECTS</div>
     <h2 class="sec-title">주요 프로젝트</h2>
-    <div class="rc-grid" id="rc-grid"></div>
+    <div class="proj-group">
+      <div class="proj-h">실무 (N2Ai, Bearable)</div>
+      <div class="rc-grid" id="work-grid"></div>
+    </div>
+    <div class="proj-group">
+      <div class="proj-h">대회, 사이드 프로젝트</div>
+      <div class="rc-grid" id="rc-grid"></div>
+    </div>
   </section>
 
   <section id="research" class="reveal">
@@ -245,7 +252,25 @@ const rc=[
    desc:"시청 이력과 메타데이터를 결합한 NeuMF 개인화 추천. 연령대별 장르 선호를 검증해 feature 설계.",
    m:[{t:"Recall@25 .2251"},{t:"NeuMF"}]},
 ];
-document.getElementById('rc-grid').innerHTML=rc.map(p=>`
+const work=[
+  {tag:"N2Ai | 특허 주발명자",yr:"2025~",title:"복합 제약 근무 편성 최적화와 실패 진단",
+   url:"projects/n2ai-schedule-optimization.html",badge:{b1:"위반 18→3",b2:"CP-SAT"},
+   desc:"여러 조건을 우선순위 계층으로 재정의한 CP-SAT 최적화와, 실패 원인을 max-flow와 온톨로지로 진단하는 설명가능 구조. 특허 주발명자.",
+   m:[{t:"핵심 위반 18 → 3",pos:1},{t:"재탐색 105 → 3회",pos:1}]},
+  {tag:"N2Ai | 실행형 PM",yr:"2025~",title:"업무 자동화 오케스트레이션 에이전트",
+   url:"projects/n2ai-orchestration-agent.html",badge:{b1:"적중 71→97%",b2:"Agent"},
+   desc:"복잡한 설정을 대화로 대체하는 실행형 에이전트. 통제를 실행 루프에 직접 심어 신규 도구가 선언만으로 안전장치를 상속.",
+   m:[{t:"적중률 71 → 97%",pos:1},{t:"분류 단가 약 12배↓",pos:1}]},
+  {tag:"N2Ai | 사내 AX",yr:"2025~",title:"데이터 셀프서비스와 플랫폼 통합 검색",
+   url:"projects/n2ai-data-selfservice.html",badge:{b1:"MRR .85→.95",b2:"Text2SQL / RAG"},
+   desc:"비개발 부서의 자연어 조회 셀프서비스(Text2SQL)와, 근거까지 제시하는 플랫폼 통합 검색 RAG.",
+   m:[{t:"조회요청 약 70%↓",pos:1},{t:"hit@5 .82 → 1.0",pos:1}]},
+  {tag:"Bearable | 창업대회 1위",yr:"2024",title:"멀티에이전트 생성 신뢰성 개선",
+   url:"projects/bearable-generation-reliability.html",badge:{b1:"1위 최우수상",b2:"멀티에이전트"},
+   desc:"품질을 근거성과 완결성 두 축으로 분리해 각기 다른 구조로 개선한 멀티에이전트 생성 파이프라인.",
+   m:[{t:"할루시 65 → 17%",pos:1},{t:"누락 40 → 3%",pos:1}]},
+];
+function cardHTML(p){return `
   <a class="rc" href="${p.url}">
     ${p.img?`<div class="ic"><img loading="lazy" src="${p.img}" alt=""></div>`
       :p.brand?`<div class="ic brand"><img loading="lazy" src="${p.brand}" alt="탐라는맛"></div>`
@@ -256,7 +281,9 @@ document.getElementById('rc-grid').innerHTML=rc.map(p=>`
       <p>${p.desc}</p>
       <div class="m">${p.m.map(x=>`<span class="${x.pos?'pos':x.wip?'wip':''}">${x.t}</span>`).join('')}</div>
     </div>
-  </a>`).join('');
+  </a>`;}
+document.getElementById('work-grid').innerHTML=work.map(cardHTML).join('');
+document.getElementById('rc-grid').innerHTML=rc.map(cardHTML).join('');
 
 const opt=[
   {t:"같은 입력, 매번 다른 결과를 lex 최소화로 잡기",u:"/optimization/lex-minimization-cpsat/"},

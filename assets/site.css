@@ -106,6 +106,10 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 @media(max-width:560px){.job-period{margin-left:0;flex-basis:100%;order:3}}
 
 /* project cards (compact, linkable) */
+.proj-group{margin-bottom:30px}
+.proj-group:last-child{margin-bottom:0}
+.proj-h{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.proj-h::before{content:"";width:14px;height:2px;background:var(--signal)}
 .rc-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 @media(max-width:720px){.rc-grid{grid-template-columns:1fr}}
 .rc{display:flex;gap:15px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;transition:transform .18s,box-shadow .22s,border-color .2s;position:relative}

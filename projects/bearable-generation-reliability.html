@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생성 신뢰성 개선 — David Lee's Lab</title>
+<meta name="description" content="품질을 근거성과 완결성 두 축으로 분리해 개선한 멀티에이전트 생성 파이프라인. 생성형 AI 창업경진대회 1위.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">Bearable / 창업경진대회 1위 최우수상 / 2024</div>
+    <h1 class="art-title">멀티에이전트와 RAG 기반 생성 신뢰성 개선</h1>
+    <div class="art-meta">
+      <span>역할 <b>Data / AI Engineer</b></span>
+      <span>담당 <b>품질 축 정의, 파이프라인 설계, 평가 체계</b></span>
+      <span>기간 <b>2023.09 ~ 2025.02</b></span>
+    </div>
+    <div class="art-stack">
+      <span>LangChain</span><span>LangGraph</span><span>ChromaDB</span><span>HyDE</span><span>PyTorch</span><span>QLoRA (인접 실험)</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>학생의 진로 활동 추천에서 전공 연계 콘텐츠를 생성할 때 할루시네이션이 늘었습니다. 근거 없이 생성된 사례와 유형별 필수 정보 누락이 <strong>동시에, 서로 다른 원인으로</strong> 발생해 단일 지표로는 판별할 수 없었습니다.</p>
+    <p>그래서 품질을 <strong>근거성</strong>과 <strong>완결성</strong> 두 지표로 분리하고, 각각에 다른 구조를 적용하는 과제로 재정의했습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>완결성.</b> 활동유형과 전공별 포함 요소를 체크리스트로 지표화. 주제 선정부터 최종 검토까지 6개 역할 에이전트로 분기(LangGraph)하고, 최종 검토에서 누락을 발견하면 해당 단계로 되돌려 재생성.</li>
+      <li><b>근거성.</b> 참조 근거가 없으면 사례가 지어내지는 문제를 막기 위해 정적 사례 DB(ChromaDB)를 구축하고, 목적별 정적과 동적 검색기를 분리 적용. 표현 격차는 HyDE 임베딩으로 보정하고 검색 근거를 생성 단계에 고정.</li>
+      <li><b>인접 실험.</b> 로컬 오픈모델 파인튜닝 타당성을 검증. 후보 3종을 QLoRA 동일 조건으로 파인튜닝해 한국어 품질과 구조적 출력 안정성을 평가.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">65 → 17%</div><div class="lab">사례 생성 할루시네이션율 (100건 기준)</div></div>
+      <div class="co"><div class="big">40 → 3%</div><div class="lab">구성요소 누락률 (100건 기준)</div></div>
+      <div class="co"><div class="big">1위</div><div class="lab">생성형 AI 창업경진대회 최우수상 (경기도지사상, 2024)</div></div>
+    </div>
+    <p>근거성과 완결성 축별 평가 데이터셋으로 오류 유형을 개별 추적해, 할루시네이션율을 65%에서 17%로, 구성요소 누락률을 40%에서 3%로 낮췄습니다. 이 서비스로 생성형 AI 창업경진대회 1위 최우수상을 받았습니다.</p>
+  </div>
+
+  <div class="honesty">
+    <h4>배운 점</h4>
+    <p>원인이 다른 오류에는 다른 구조를 적용해야 한다는 것을 배웠습니다. 근거성은 검색 근거 고정으로, 완결성은 체크리스트 기반 되돌림 재생성으로 나눠 풀었습니다. 파인튜닝 실험은 성능 향상 자체가 아니라, 형식 안정성이 부족해 <strong>로컬로 전환하지 않는다</strong>는 의사결정을 데이터로 뒷받침한 사례였습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="../index.html#credentials">수상 내역 ↗</a>
+  </div>
+</div>
+
+<footer><div class="wrap"><div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div></div></footer>
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

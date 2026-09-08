@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오케스트레이션 에이전트 — David Lee's Lab</title>
+<meta name="description" content="복잡한 설정을 대화로 대체하는 실행형 에이전트와, 통제를 실행 루프에 심은 재사용 실행 계층">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">N2Ai / 실행형 PM / 2025 ~ 현재</div>
+    <h1 class="art-title">업무 자동화 오케스트레이션 에이전트와 재사용 실행 계층</h1>
+    <div class="art-meta">
+      <span>역할 <b>AI Engineer</b></span>
+      <span>담당 <b>문제 재정의, 설계, 구현, 배포, 고객사 조율</b></span>
+      <span>기간 <b>2025.03 ~ 재직중</b></span>
+    </div>
+    <div class="art-stack">
+      <span>OpenAI SDK</span><span>Tool Calling</span><span>ReAct</span><span>자체 실행 루프</span><span>2단 모델 라우팅</span><span>FastAPI</span><span>Qdrant</span><span>Redis</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>제품의 설정 등록이 복잡해 미완료 상태로 문의가 반복되고, 도입 중도 포기가 발생했습니다. 설정 항목 개수와 탐색 경로가 병목이라, <strong>인터페이스 자체를 대화형으로 대체하는 과제</strong>로 재정의했습니다.</p>
+    <p>다만 운영 데이터를 직접 바꾸는 작업이라, 권한과 검증과 승인을 원하는 위치에 둘 수 있어야 한다는 통제 요구가 있었습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>자체 실행 루프.</b> 도구 실행 앞뒤에 통제를 삽입하기 위해 범용 프레임워크 의존을 제거하고, 의도 분석, 실행 계획, 도구 호출, 결과 검증, 응답 생성 루프를 직접 구현.</li>
+      <li><b>재사용 실행 계층.</b> 도구 화이트리스트, 입력 검증, 승인 분리, 접근 통제를 공통 미들웨어로 통합. 신규 기능이 선언 등록만으로 동일한 통제를 상속하도록 설계.</li>
+      <li><b>2단 모델 라우팅.</b> 도구가 늘수록 나빠지는 분류 품질과 비용을 2단 라우팅으로 분리. 후보 모델을 동일 조건으로 실측 비교해 구간별 계층을 나눔.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">71 → 97%</div><div class="lab">최상위 검색 적중률 (질의 31개 변형 채점)</div></div>
+      <div class="co"><div class="big">약 50%↓</div><div class="lab">온보딩 설정 문의, 도입 이탈 해소</div></div>
+      <div class="co"><div class="big">약 12배↓</div><div class="lab">라우터 분류 호출 단가 ($1.465 → $0.118 / 1,000회)</div></div>
+    </div>
+    <p>사용법 질의 31개 변형을 채점해 도구와 기능 라우팅의 최상위 적중률을 71%에서 97%로 올렸습니다. 온보딩 설정 문의는 약 50% 줄었고, 라우터 분류 호출 단가는 정확도가 동률인 조건에서 약 12배 절감했습니다.</p>
+  </div>
+
+  <div class="honesty">
+    <h4>배운 점</h4>
+    <p>범용 프레임워크를 걷어내고 통제를 실행 루프에 직접 심어, 신규 도구가 선언만으로 동일한 안전장치를 상속하게 만든 재사용 설계가 핵심이었습니다. 관측 지표로 조용한 실패를 포착해 도구 선언 구조까지 교정했습니다. (12배는 시스템 전체가 아니라 라우터 분류 호출 단가 기준입니다.)</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="../index.html#about">강점 보기 ↗</a>
+  </div>
+</div>
+
+<footer><div class="wrap"><div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div></div></footer>
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

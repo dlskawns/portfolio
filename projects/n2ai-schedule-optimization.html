@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>근무 편성 최적화와 실패 진단 — David Lee's Lab</title>
+<meta name="description" content="계층적 CP-SAT 최적화와 max-flow, 온톨로지 기반 설명가능 실패 진단. 근무표 최적화 특허 주발명자.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">N2Ai / 특허 주발명자 / 2025 ~ 현재</div>
+    <h1 class="art-title">복합 제약 근무 편성 최적화와 설명가능 실패 진단</h1>
+    <div class="art-meta">
+      <span>역할 <b>AI Engineer</b></span>
+      <span>담당 <b>목적함수 재설계, 진단 구조 설계</b></span>
+      <span>기간 <b>2025.03 ~ 재직중</b></span>
+    </div>
+    <div class="art-stack">
+      <span>OR-Tools CP-SAT</span><span>LNS</span><span>Lexicographic 계층 최적화</span><span>max-flow</span><span>FastAPI</span><span>MSSQL</span><span>Redis</span><span>AWS</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>수기로 며칠이 걸리던 인력 배치 편성을 자동화하는 문제입니다. 다수의 제약 조건을 사람이 조율하기 어렵고, 그 조건들을 <strong>단일 점수로 합산해 관리하면 위반 사이의 중요도 차이가 사라집니다.</strong></p>
+    <p>예를 들어 필수 인원 부족과 희망 근무 미반영이 같은 위반 1건으로 집계됩니다. 운영 관점의 중요도를 구분할 수 없고, 해를 못 찾을 때 어떤 조건이 원인인지 진단할 수도 없습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>목적함수 재설계.</b> 평가를 우선순위 항목별 위반 개수로 재정의하고, 상위 목표부터 충족하는 계층적(Lexicographic) 최적화로 전환. CP-SAT에 LNS 재탐색을 결합.</li>
+      <li><b>대안 검증과 기각.</b> 재탐색 위치 선택을 학습으로 개선하려던 가설을 강화학습(PPO) 실험으로 검증했으나, 병목이 학습 파라미터가 아니라 목적 우선순위임을 실측으로 확인하고 단계별 제약 최적화로 해결.</li>
+      <li><b>설명가능 진단 그래프.</b> 제약, 대상, 상태, 조치를 노드로 하는 경량 관계 그래프로 충돌 원인을 구조화. max-flow로 부족 하한을 산술 산출하고, 복구 대안을 최소 변경 순으로 리랭킹한 뒤, 솔버 재실행으로 검증.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">18 → 3</div><div class="lab">운영 핵심 위반 개수 (학습 탐색 정책 실험 대비)</div></div>
+      <div class="co"><div class="big">105 → 3</div><div class="lab">진단 재탐색 횟수</div></div>
+      <div class="co"><div class="big">94.0 → 42.9s</div><div class="lab">실패 경로 소요 시간</div></div>
+    </div>
+    <p>강화학습 탐색 정책 실험을 대조군으로 두고 비교한 결과, 운영 핵심 위반을 18건에서 3건으로 줄였습니다. 진단 파이프라인은 재탐색을 105회에서 3회로, 실패 경로 시간을 94.0초에서 42.9초로 단축했습니다.</p>
+    <p>이 구조로 <strong>「인공지능 기반 의료 인력 근무 일정 최적화 방법 및 시스템」 특허의 주발명자로 등록</strong>했습니다. (출원 10-2025-0112976)</p>
+  </div>
+
+  <div class="honesty">
+    <h4>배운 점</h4>
+    <p>학습 기반 개선을 먼저 가정하지 않았습니다. 병목을 실측으로 규명한 뒤, 해법이 강화학습이 아니라 목적 우선순위 재설계였음을 데이터로 확인하고 방향을 정했습니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="../index.html#credentials">특허 내역 ↗</a>
+  </div>
+</div>
+
+<footer><div class="wrap"><div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div></div></footer>
+<script src="../assets/site.js" defer></script>
+</body>
+</html>
