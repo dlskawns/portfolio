@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>데이터 셀프서비스와 통합 검색 — David Lee's Lab</title>
-<meta name="description" content="비개발 부서의 자연어 데이터 조회 셀프서비스(Text2SQL)와, 근거까지 제시하는 플랫폼 통합 검색 RAG">
+<title>데이터 셀프서비스 Text2SQL — David Lee's Lab</title>
+<meta name="description" content="비개발 부서가 자연어로 데이터를 직접 조회하는 셀프서비스. 레거시 컬럼을 업무 용어로 잇는 메타데이터 매핑과 권한 우선 설계.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,56 +31,49 @@
 
   <div class="art-head">
     <div class="art-kick">N2Ai / 사내 AX / 2025 ~ 현재</div>
-    <h1 class="art-title">사내 데이터 셀프서비스와 플랫폼 통합 검색</h1>
+    <h1 class="art-title">사내 데이터 셀프서비스 (Text2SQL)</h1>
     <div class="art-meta">
       <span>역할 <b>AI Engineer</b></span>
-      <span>담당 <b>데이터 정제, 검색 파이프라인 설계, 평가 체계</b></span>
+      <span>담당 <b>레거시 정제, 데이터 마트 설계, 자연어 질의 연결</b></span>
       <span>기간 <b>2025.03 ~ 재직중</b></span>
     </div>
     <div class="art-stack">
-      <span>Text2SQL</span><span>Qdrant</span><span>cross-encoder bge-reranker-v2-m3</span><span>HyDE</span><span>Self-query</span><span>RRF</span><span>FTS5</span><span>LangFuse</span><span>RAGAS</span>
+      <span>Text2SQL</span><span>MSSQL</span><span>메타데이터 매핑</span><span>권한 제어</span><span>FastAPI</span><span>시각화</span>
     </div>
   </div>
 
   <div class="block">
-    <h3>사내 데이터 셀프서비스 (Text2SQL)</h3>
-    <p><b>문제.</b> 비개발 부서의 수치 확인이 데이터팀 요청과 대기에 의존했습니다. 레거시 시스템은 서비스별로 같은 의미를 다른 컬럼명으로 써서, 자연어 질의를 데이터에 연결할 수 없는 상태였습니다.</p>
+    <h3>문제</h3>
+    <p>비개발 부서의 수치 확인이 데이터팀 요청과 대기에 의존했습니다. 레거시 시스템은 서비스별로 같은 의미를 다른 컬럼명으로 써서, <strong>자연어 질의를 데이터에 연결할 수 없는 상태</strong>였습니다.</p>
+    <p>안내 문서를 늘리는 문제가 아니라, 부서가 직접 조회하도록 자연어와 데이터 사이를 잇는 문제로 다시 정의했습니다. 다만 운영 데이터를 다루므로, 권한을 통과한 읽기 전용 조회만 허용하는 것이 전제였습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
     <ul>
       <li><b>레거시 정제와 데이터 마트.</b> 흩어진 운영 데이터를 단일 기준으로 표준화하고 조회 전용 마트로 재구성. 업무 용어와 실제 컬럼을 잇는 메타데이터 매핑으로 자연어 질의를 데이터에 정합.</li>
       <li><b>권한 우선 설계.</b> 사용자별 접근 권한을 먼저 세우고, 권한을 통과한 읽기 전용 질의만 조회하도록 제한.</li>
       <li><b>시연 기반 확산.</b> 각 팀의 반복 수작업을 현장에서 자동화해 보이는 시연으로 도입 저항을 해소.</li>
     </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
     <div class="callouts">
       <div class="co"><div class="big">약 70%↓</div><div class="lab">데이터팀 경유 조회 요청</div></div>
       <div class="co"><div class="big">셀프서비스</div><div class="lab">비개발 직원의 자연어 직접 조회와 시각화</div></div>
     </div>
-  </div>
-
-  <div class="block">
-    <h3>플랫폼 통합 검색 (문서 RAG)</h3>
-    <p><b>문제.</b> 플랫폼 기본 검색이 필터 문자열 일치라 누락이 많고, 첨부 문서는 본문이 검색되지 않았습니다. 근거를 제시하지 못하는 답변은 신뢰를 얻지 못해, 근거 확인성을 검색 정확도와 동급 제약으로 두었습니다.</p>
-    <ul>
-      <li><b>입력 라우팅과 인덱스 설계.</b> 스캔 PDF처럼 추출 텍스트가 없는 문서를 형식과 품질로 분기. 파일명과 게시 영역을 덧붙인 인덱스 텍스트로 dense 검색을 구성하고 HyDE, Self-query로 질의를 확장.</li>
-      <li><b>리랭킹과 근거 통제.</b> 1차 검색 풀에서 cross-encoder로 리랭킹하고, 근거 충분성을 자체 점검해 부족하면 조건을 완화해 재시도, 끝내 없으면 확인 불가로 중단하는 루프.</li>
-      <li><b>랭킹 축 확장.</b> 어휘 채널(FTS5)을 조건부 폴백으로 붙이고, 문서 역할 7종을 규칙으로 판정. 의미, 어휘, 필드 세 채널을 가중 RRF로 융합하되 어떤 채널도 끄지 않아 질의 오분류가 검색 붕괴로 이어지지 않게 구성.</li>
-      <li><b>안정 재정렬과 결정론화.</b> 점수 가산을 금지하고 역할이 맞는 문서만 제한적으로 끌어올림. 질의 이해와 관련도 게이트 온도를 0으로 고정해 평가 재현성을 확보. 전자결재 검색은 문서별 권한과 테넌트 격리를 검색 전 단계에서 강제.</li>
-    </ul>
-    <div class="callouts">
-      <div class="co"><div class="big">0.85 → 0.95</div><div class="lab">1단계 MRR (골드 50문항, 1,630 세그먼트)</div></div>
-      <div class="co"><div class="big">0.82 → 1.0</div><div class="lab">2단계 known-item hit@5 (MRR 0.70 → 0.93)</div></div>
-      <div class="co"><div class="big">3.53 → 2.87s</div><div class="lab">검색 지연 p50, 채널을 늘리고도 개선</div></div>
-    </div>
-    <p style="font-size:13px;color:var(--faint);font-family:var(--mono);margin-top:12px">※ 1단계와 2단계는 평가셋이 다르므로 수치를 혼용하지 않습니다.</p>
+    <p>데이터팀을 경유하던 조회 요청을 약 70% 줄였고, 비개발 직원이 자연어로 직접 조회하고 시각화하는 셀프서비스로 전환했습니다.</p>
   </div>
 
   <div class="honesty">
     <h4>배운 점</h4>
-    <p>근거 확인성을 검색 정확도와 동급 제약으로 못박고, 하드 라우팅과 점수 가산을 배제한 채 신호로 채널 가중만 조절해 라우터 오분류가 검색 붕괴로 번지지 않게 했습니다. GPU가 없는 인프라 제약이 로컬 리랭커 대신 API와 어휘 방식을 쓰는 설계 선택을 실제로 결정했습니다.</p>
+    <p>자연어 조회의 병목은 모델이 아니라 레거시 데이터의 의미 불일치였습니다. 업무 용어와 실제 컬럼을 잇는 메타데이터 매핑을 먼저 세우고, 권한을 통과한 읽기 전용 질의만 허용하도록 접근 통제를 조회 앞 단계에 두었습니다.</p>
   </div>
 
   <div class="art-foot">
     <a href="../index.html#projects">← 주요 프로젝트</a>
-    <a href="https://dlskawns.github.io/nlp-llm/title-boost-selectivity/" target="_blank" rel="noopener">관련 연구 기록 ↗</a>
+    <a href="n2ai-search-rag.html">플랫폼 통합 검색 RAG ↗</a>
   </div>
 </div>
 

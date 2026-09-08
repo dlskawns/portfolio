@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>플랫폼 통합 문서검색 RAG — David Lee's Lab</title>
+<meta name="description" content="흩어진 규정과 매뉴얼, 첨부 문서 본문까지 의미 기반으로 검색하고, 근거가 부족하면 답변을 중단하는 통합검색 RAG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../assets/img/favicon-180.png">
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="../index.html">David Lee's Lab<i>.</i></a>
+    <div class="nav-right">
+      <a class="nav-back" href="../index.html#projects">← projects</a>
+      <button id="themeBtn" class="theme-btn" aria-label="테마 전환" title="테마 전환">◐</button>
+    </div>
+  </div>
+</nav>
+
+<div class="article">
+  <div class="art-top"><a class="art-back" href="../index.html#projects">← 주요 프로젝트</a></div>
+
+  <div class="art-head">
+    <div class="art-kick">N2Ai / 사내 AX / 2025 ~ 현재</div>
+    <h1 class="art-title">플랫폼 통합 문서검색 RAG와 근거 통제</h1>
+    <div class="art-meta">
+      <span>역할 <b>AI Engineer</b></span>
+      <span>담당 <b>RAG 파이프라인 설계, 개발, 평가 (프로젝트 리드)</b></span>
+      <span>기간 <b>2025.03 ~ 재직중</b></span>
+    </div>
+    <div class="art-stack">
+      <span>Python</span><span>FastAPI</span><span>Qdrant</span><span>LangGraph</span><span>Cross-Encoder</span><span>HyDE</span><span>Self-query</span><span>RAGAS</span><span>Langfuse</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>문제</h3>
+    <p>고객사 플랫폼에는 규정과 공지, 매뉴얼이 일반 문서와 스캔본으로 나뉘어 쌓여 있었습니다. 기본 검색이 문자열 일치라 표현이나 띄어쓰기가 다르면 문서가 누락됐고, 게시글에 첨부된 문서는 본문 자체가 검색 대상이 아니었습니다.</p>
+    <p>관련 문서를 찾는 것을 넘어, <strong>답변에 사용한 근거를 사용자가 직접 확인할 수 있어야 업무에서 신뢰할 수 있다</strong>고 판단했습니다. 그래서 검색 성능과 근거 확인을 함께 평가하는 과제로 다시 정의했습니다.</p>
+  </div>
+
+  <div class="block">
+    <h3>접근</h3>
+    <ul>
+      <li><b>문서 전처리와 인덱스.</b> 임베딩 전에 형식과 품질을 판별해 본문 파싱, 짧은 텍스트, 제외 경로로 분기. 추출 텍스트가 없는 스캔 문서는 별도 경로로 텍스트를 확보하고, 검색 단위를 페이지와 문단, 표로 나눠 인덱스를 구성.</li>
+      <li><b>질의 처리와 재정렬.</b> Qdrant dense 검색을 기본으로, 짧거나 모호한 질의는 HyDE와 Self-query로 확장해 표현 차이를 보정. 1차 후보는 Cross-Encoder로 재정렬.</li>
+      <li><b>리랭커 선정.</b> 여러 로컬 크로스인코더 후보를 문서 본문을 외부로 전송하지 않고 A/B로 비교해 재정렬 모델을 선정. (로컬 리랭커 서빙은 벤치마크 실험 단계.)</li>
+      <li><b>근거 통제.</b> 검색과 근거 점검, 재검색, 답변 생성을 LangGraph로 구성. 근거가 부족하면 조건을 완화해 재검색하고, 끝내 확보되지 않으면 답변을 중단해 근거 없는 응답을 차단.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>평가</h3>
+    <p>측정 없이 개선을 정당화할 수 없다고 보고, 평가 체계를 먼저 세웠습니다.</p>
+    <ul>
+      <li><b>합성 평가 코퍼스.</b> 실데이터 결함(본문 없이 제목만 있는 스텁 문서, 표 파싱 오류, 구본)을 재현한 코퍼스를 만들고, 문서 생성기와 정답 판정을 분리해 순환논리를 차단.</li>
+      <li><b>격리 측정.</b> 등급형 정답셋과 hard-negative(같은 토픽 다른 역할, 한 슬롯만 다른 false-friend)로 검색 랭킹을 격리 측정하고, 의도 단위 hold-out으로 미학습 의도까지 일반화를 확인.</li>
+      <li><b>실패 분리 진단.</b> 검색 실패를 랭킹 문제와 데이터 문제(제목만 있는 스텁, 외부 시스템 미연동)로 분리 진단해 개선 우선순위를 결정.</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <h3>결과</h3>
+    <div class="callouts">
+      <div class="co"><div class="big">0.85 → 0.95</div><div class="lab">본문 검색 MRR (사람이 확인한 평가 데이터셋)</div></div>
+      <div class="co"><div class="big">본문 확대</div><div class="lab">문자열 검색에서 누락되던 첨부문서 본문까지 검색</div></div>
+      <div class="co"><div class="big">근거 통제</div><div class="lab">근거 미달 시 답변 중단, 근거 없는 응답 차단</div></div>
+    </div>
+    <p>본문 검색 MRR을 0.85에서 0.95로 올렸고, 문자열 검색에서 빠지던 첨부문서 본문까지 검색 범위를 넓혀 고객사 플랫폼에 연동했습니다.</p>
+  </div>
+
+  <div class="honesty">
+    <h4>배운 점</h4>
+    <p>근거 확인성을 검색 정확도와 동급 제약으로 못박고, 근거가 끝내 부족하면 답변을 중단하도록 실행 흐름에 통제를 심었습니다. 리랭커 선정은 문서 본문을 외부로 전송하지 않는 로컬 A/B 벤치마크 실험으로 진행했고, 로컬 리랭커 상시 서빙은 실험 단계로 구분합니다.</p>
+  </div>
+
+  <div class="art-foot">
+    <a href="../index.html#projects">← 주요 프로젝트</a>
+    <a href="https://dlskawns.github.io/nlp-llm/eval-harness-pitfalls/" target="_blank" rel="noopener">관련 연구 기록 ↗</a>
+  </div>
+</div>
+
+<footer><div class="wrap"><div class="foot-copy">David Lee's Lab — © 2026 이남준 (Lee NamJoon)</div></div></footer>
+<script src="../assets/site.js" defer></script>
+</body>
+</html>
