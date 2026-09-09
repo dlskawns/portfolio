@@ -78,10 +78,10 @@
         <p>의류 영업과 소싱 데이터 실무, 추천시스템 개발 경험을 토대로 LLM Agent를 만들고 있습니다. 제가 만든 도구로 막힌 지점을 풀고, 사용자가 스스로 해내는 순간을 가장 중요하게 생각합니다.</p>
       </div>
       <ul class="strengths">
-        <li><span class="k">OWNERSHIP</span><span class="v"><b>도입까지 책임진다.</b> 문제를 스스로 정의하고, 도구와 구조를 만들어, 현장에 자리 잡을 때까지 끌고 간다.</span></li>
-        <li><span class="k">AGENT WORKFLOW</span><span class="v"><b>실행형 파이프라인 설계.</b> 의도분석, 실행계획, 툴호출, 검증, 응답을 하나의 흐름으로 구성한다.</span></li>
-        <li><span class="k">RAG RELIABILITY</span><span class="v"><b>신뢰할 수 있는 응답.</b> 실데이터 grounding으로 환각을 억제하고 근거를 남기는 구조를 만든다.</span></li>
-        <li><span class="k">RECSYS → AGENT</span><span class="v"><b>추천에서 에이전트로.</b> MF, FM, NeuMF, SASRec 기반을 LLM 멀티에이전트로 확장한다.</span></li>
+        <li><span class="k">OWNERSHIP</span><span class="v"><b>도입까지 책임집니다.</b> 문제를 스스로 정의하고, 도구와 구조를 만들어, 현장에 자리 잡을 때까지 끌고 갑니다.</span></li>
+        <li><span class="k">AGENT WORKFLOW</span><span class="v"><b>실행형 파이프라인 설계.</b> 의도분석, 실행계획, 툴호출, 검증, 응답을 하나의 흐름으로 구성합니다.</span></li>
+        <li><span class="k">RAG RELIABILITY</span><span class="v"><b>신뢰할 수 있는 응답.</b> 실데이터 grounding으로 환각을 억제하고 근거를 남기는 구조를 만듭니다.</span></li>
+        <li><span class="k">RECSYS → AGENT</span><span class="v"><b>추천에서 에이전트로.</b> MF, FM, NeuMF, SASRec 기반을 LLM 멀티에이전트로 확장합니다.</span></li>
       </ul>
     </div>
   </section>
@@ -164,7 +164,7 @@
   <section id="vision" class="reveal vision">
     <div class="eyebrow"><b>07</b> HORIZON / 5-YEAR</div>
     <h2 class="sec-title">앞으로 5년</h2>
-    <p class="q"><span class="en">Agent</span>로 서비스와 서비스를 잇고, 한 기업을 넘어 분야 전체가 돌아가는 생태계를 만든다.</p>
+    <p class="q"><span class="en">Agent</span>로 서비스와 서비스를 잇고, 한 기업을 넘어 분야 전체가 돌아가는 생태계를 만들어 갑니다.</p>
     <p>지금까지 만든 실행형 에이전트와 제약 최적화, 추천 경험을 이어, 사람이 막혀 있던 지점을 자동으로 푸는 도구를 여러 도메인에서 재사용 가능한 형태로 표준화하는 것이 목표입니다.</p>
     <div class="vtl">
       <div class="vrow"><div class="yr">~1-2년</div><div class="txt"><b>실행형 아키텍처 정착.</b> 제약 최적화와 LLM Agent를 한 제품 안에서 결합해 현장에서 운영되는 구조로 완성.</div></div>
@@ -289,7 +289,7 @@ function cardHTML(p){return `
 document.getElementById('work-grid').innerHTML=work.map(cardHTML).join('');
 document.getElementById('rc-grid').innerHTML=rc.map(cardHTML).join('');
 
-// 연구 기록: 블로그 research.json 을 실시간으로 불러온다. 실패하면 아래 폴백 목록을 쓴다.
+// 연구 기록: 블로그 research.json 실시간 로드. 실패 시 아래 폴백 목록 사용.
 const optFallback=[
   {t:"같은 입력, 매번 다른 결과를 lex 최소화로 잡기",u:"/optimization/lex-minimization-cpsat/"},
   {t:"무거운 솔버 앞에 가벼운 max-flow 검사 두기",u:"/optimization/maxflow-soundness-presolve-gate/"},
