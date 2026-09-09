@@ -289,7 +289,8 @@ function cardHTML(p){return `
 document.getElementById('work-grid').innerHTML=work.map(cardHTML).join('');
 document.getElementById('rc-grid').innerHTML=rc.map(cardHTML).join('');
 
-const opt=[
+// 연구 기록: 블로그 research.json 을 실시간으로 불러온다. 실패하면 아래 폴백 목록을 쓴다.
+const optFallback=[
   {t:"같은 입력, 매번 다른 결과를 lex 최소화로 잡기",u:"/optimization/lex-minimization-cpsat/"},
   {t:"무거운 솔버 앞에 가벼운 max-flow 검사 두기",u:"/optimization/maxflow-soundness-presolve-gate/"},
   {t:"의료 밖에서 MES를 공부하게 된 이유",u:"/optimization/mes-basics/"},
@@ -297,14 +298,30 @@ const opt=[
   {t:"사전등록한 가설이 기각됐다 (NOT SUPPORTED)",u:"/optimization/prereg-not-supported/"},
   {t:"외부 벤치마크에서 재현이 안 됐다",u:"/optimization/external-replication/"},
 ];
-const llm=[
+const llmFallback=[
   {t:"도구 300개를 주면 에이전트는 못 고른다",u:"/nlp-llm/tool-selection-scaling/"},
   {t:"내 평가셋이 틀렸다, 오답 절반의 재감사",u:"/nlp-llm/eval-harness-pitfalls/"},
   {t:"제목 부스트의 선택도를 df로 쟀다가 두 번 틀렸다",u:"/nlp-llm/title-boost-selectivity/"},
 ];
 const li=a=>`<a href="${BLOG}${a.u}" target="_blank" rel="noopener"><span>${a.t}</span></a>`;
-document.getElementById('opt-list').innerHTML=opt.map(li).join('');
-document.getElementById('llm-list').innerHTML=llm.map(li).join('');
+function renderResearch(opt,llm){
+  document.getElementById('opt-list').innerHTML=opt.map(li).join('');
+  document.getElementById('llm-list').innerHTML=llm.map(li).join('');
+}
+function cleanTitle(t){return String(t).replace(/^.*? - /,'').replace(/\s*\(feat\.[^)]*\)\s*$/,'').trim();}
+fetch(`${BLOG}/research.json`,{cache:'no-cache'})
+  .then(r=>{if(!r.ok)throw 0;return r.json();})
+  .then(posts=>{
+    const opt=[],llm=[];
+    posts.forEach(p=>{
+      const item={t:cleanTitle(p.title),u:p.url};
+      if(p.cat==='optimization'||p.cat==='paper-review')opt.push(item);
+      else if(p.cat==='nlp-llm')llm.push(item);
+    });
+    if(!opt.length&&!llm.length)throw 0;
+    renderResearch(opt,llm);
+  })
+  .catch(()=>renderResearch(optFallback,llmFallback));
 </script>
 <script src="assets/site.js" defer></script>
 </body>
