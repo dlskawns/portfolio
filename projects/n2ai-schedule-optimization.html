@@ -38,7 +38,7 @@
       <span>기간 <b>2025.03 ~ 재직중</b></span>
     </div>
     <div class="art-stack">
-      <span>OR-Tools CP-SAT</span><span>LNS</span><span>Lexicographic 계층 최적화</span><span>max-flow</span><span>FastAPI</span><span>MSSQL</span><span>Redis</span><span>AWS</span>
+      <span>OR-Tools CP-SAT</span><span>LNS</span><span>Lexicographic 계층 최적화</span><span>max-flow</span><span>Neo4j</span><span>FastAPI</span><span>MSSQL</span><span>Redis</span><span>AWS</span>
     </div>
   </div>
 
@@ -75,7 +75,8 @@
     <ul>
       <li><b>목적함수 재설계.</b> 평가를 우선순위 항목별 위반 개수로 재정의하고, 상위 목표부터 충족하는 계층적(Lexicographic) 최적화로 전환. CP-SAT에 LNS 재탐색을 결합.</li>
       <li><b>대안 검증과 기각.</b> 재탐색 위치 선택을 학습으로 개선하려던 가설을 강화학습(PPO) 실험으로 검증했으나, 병목이 학습 파라미터가 아니라 목적 우선순위임을 실측으로 확인하고 단계별 제약 최적화로 해결.</li>
-      <li><b>설명가능 진단 그래프.</b> 제약, 대상, 상태, 조치를 노드로 하는 경량 관계 그래프로 충돌 원인을 구조화. max-flow로 부족 하한을 산술 산출하고, 복구 대안을 최소 변경 순으로 리랭킹한 뒤, 솔버 재실행으로 검증.</li>
+      <li><b>설명가능 진단 그래프.</b> 제약, 대상, 상태, 조치를 노드로 하는 경량 관계 그래프(Neo4j)로 충돌 원인을 구조화. max-flow로 부족 하한을 산술 산출하고, 복구 대안을 최소 변경 순으로 리랭킹한 뒤, 솔버 재실행으로 검증.</li>
+      <li><b>개인 희망의 정량화.</b> 개인 근무 희망을 멀티에이전트 LLM 선호 스코어링으로 해석해 정량 규칙으로 편입, 목적함수의 소프트 항으로 반영. (특허의 핵심 구조.)</li>
     </ul>
     <div class="dg-fig">
     <svg class="dg" viewBox="0 0 660 268" role="img" aria-label="단일 점수 합산과 계층적 최적화의 비교">
