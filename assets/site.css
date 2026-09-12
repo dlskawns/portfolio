@@ -120,6 +120,8 @@ section{padding:56px 0;border-top:1px solid var(--line)}
 :root[data-theme="dark"] .rc .ic.brand{background:radial-gradient(130% 130% at 30% 12%,#2a2016,#241a12)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .rc .ic.brand{background:radial-gradient(130% 130% at 30% 12%,#2a2016,#241a12)}}
 .rc .ic.brand img{object-fit:contain}
+.rc .ic.glyph{display:flex;align-items:center;justify-content:center;color:var(--signal);background:var(--signal-soft);border-color:color-mix(in srgb,var(--signal) 22%,var(--line))}
+.rc .ic.glyph svg{width:32px;height:32px;display:block}
 .rc .ic.badge{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:var(--signal-soft);border-color:color-mix(in srgb,var(--signal) 30%,var(--line));text-align:center}
 .rc .ic.badge .b1{font-family:var(--disp);font-weight:700;font-size:14px;color:var(--signal);line-height:1.05}
 .rc .ic.badge .b2{font-family:var(--mono);font-size:8.5px;color:var(--muted)}
